@@ -37,17 +37,12 @@ countries = [
     ]
 
 class GoogleFluAgent:
-    def __init__(self):
+    def __init__(self, settings):
         self.adapter = GoogleFluAdapter()
+        self.settings = settings
 
     def update(self):
         for country in countries:
             input = urllib2.urlopen('http://www.google.org/flutrends/%s/data.txt' % (country,)).read()
             output = self.adapter.adapt(input)
-
-            # Write to scratch for now
-            path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-            stream = open(path + '/.scratch/%s.json' % (country,), 'w')
-            stream.write(output)
-            stream.close()
-            
+            urllib2.urlopen('http://' + self.settings['host'] + ':' + str(self.settings['port']) + self.settings['path'] + '/data/write/flu/%s.json' % (country,), output)
