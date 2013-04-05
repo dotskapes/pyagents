@@ -1,0 +1,1 @@
+from flu import GoogleFluAdapter
