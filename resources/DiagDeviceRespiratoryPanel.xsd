@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (http://www.altova.com) by Dan (SIMI) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="DiagDevRespiratoryPanel">
+		<xs:annotation>
+			<xs:documentation>root element - diagnostic device respiratory panel results</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DateTime" type="xs:dateTime"/>
+							<xs:element name="SourceID">
+								<xs:simpleType>
+									<xs:restriction base="xs:nonNegativeInteger">
+										<xs:maxExclusive value="9"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SampleID" type="xs:string"/>
+							<xs:element name="Location" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Longitude">
+											<xs:simpleType>
+												<xs:restriction base="xs:decimal">
+													<xs:fractionDigits value="6"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Latitude">
+											<xs:simpleType>
+												<xs:restriction base="xs:decimal">
+													<xs:fractionDigits value="6"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Device" type="xs:string"/>
+							<xs:element name="DeviceID" type="xs:string"/>
+							<xs:element name="DevicePlexity">
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:maxExclusive value="999"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="AssaySetID" type="xs:string"/>
+							<xs:element name="LotID" type="xs:string"/>
+							<xs:element name="Control" type="xs:integer"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="LineDetail" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Test" type="xs:string"/>
+							<xs:element name="LOINC" type="xs:string" minOccurs="0"/>
+							<xs:element name="Result">
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:maxExclusive value="9"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Footer">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Technician" type="xs:string"/>
+							<xs:element name="Status">
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:maxExclusive value="9"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Calibration">
+								<xs:simpleType>
+									<xs:restriction base="xs:integer">
+										<xs:maxExclusive value="9"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Software" type="xs:string"/>
+							<xs:element name="DeviceVersion" type="xs:string" minOccurs="0"/>
+							<xs:element name="Diagnostics" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
