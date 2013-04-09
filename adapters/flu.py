@@ -1,7 +1,10 @@
 import os
 import inspect
 
-import simplejson as json
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 import codecs
 
