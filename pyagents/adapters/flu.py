@@ -33,7 +33,7 @@ except ImportError:
 
 import codecs
 
-from pyagents.base import BaseAdapter
+from base import BaseAdapter
 
 
 class GoogleFluAdapter(BaseAdapter):
