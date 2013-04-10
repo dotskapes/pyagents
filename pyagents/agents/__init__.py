@@ -26,3 +26,4 @@
 from base import BaseAgent
 from flu import GoogleFluAgent
 from pon import PointOfNeedDiagnosticAgent
+from healthmap import HealthmapAgent

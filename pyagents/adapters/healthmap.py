@@ -21,9 +21,6 @@
 #
 ###############################################################################
 
-import urllib2
-
-from pprint import pprint
 try:
     import json
 except ImportError:
@@ -31,20 +28,19 @@ except ImportError:
 
 from pyagents.adapters import BaseAdapter
 
-class HealthMapAdapter(BaseAdapter):
+
+class HealthmapAdapter(BaseAdapter):
     """Data adapter for handling the Healthmap data"""
 
     def __init__(self):
-        super(HealthMapAdapter, self).__init__()
+        super(HealthmapAdapter, self).__init__()
 
     def adapt(self, data):
-        auth = ''
         feature_collection = []
-        target_url = 'http://healthmap.org/HMapi.php?auth=' + auth + '&striphtml=1'
-        data = json.load(urllib2.urlopen(target_url))
-       
-        for record in data:
-            loc = [record['lat'], record['lng']]
+        healthmap_records = json.loads(data)
+
+        for record in healthmap_records:
+            loc = [float(record['lat']), float(record['lng'])]
             properties = dict()
             properties['country'] = record['country']
             properties['place_name'] = record['place_name']
@@ -58,13 +54,10 @@ class HealthMapAdapter(BaseAdapter):
                 properties['summary'] = alert['summary']
                 # change data into geojson format
                 geometry = {'type': 'Point',
-                          'coordinates': loc}
+                            'coordinates': loc}
                 feature = {'type': 'Feature',
-                         'geometry': geometry,
-                         'properties': properties}
+                           'geometry': geometry,
+                           'properties': properties}
                 feature_collection.append(feature)
         return json.dumps({'type': 'FeatureCollection',
                            'features': [feature_collection]})
-
-
-

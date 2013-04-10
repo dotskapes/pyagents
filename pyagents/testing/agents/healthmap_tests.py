@@ -23,7 +23,19 @@
 #
 ###############################################################################
 
-from flu import GoogleFluAdapter
-from base import BaseAdapter
-from pon import PointOfNeedDiagnosticAdapter
-from healthmap import HealthmapAdapter
+import unittest
+
+from pyagents.agents import HealthmapAgent
+
+
+class TestHealthmapAgent(unittest.TestCase):
+
+    def test_seven_days(self):
+        settings = {'host': '127.0.0.1',
+                    'port': 8888,
+                    'path': '/fudd',
+                    'source_uri': 'http://healthmap.org/HMapi.php',
+                    'auth_token': ''}
+        agent = HealthmapAgent(settings)
+        output = agent.update()
+        print output
