@@ -35,10 +35,10 @@ class PointOfNeedDiagnosticAgent(BaseAgent):
     hosted by MIT-LL."""
 
     def __init__(self, settings):
-        super(PointOfNeedDiagnosticAgent, self).__init__(settings)
-        self.adapter = PointOfNeedDiagnosticAdapter()
+        super(PointOfNeedDiagnosticAgent, self).__init__(PointOfNeedDiagnosticAdapter, settings)
 
     def update(self):
         input_data = urllib2.urlopen(self.settings['source_uri']).read()
+        print self.adapter.adapt
         output = self.adapter.adapt(input_data)
         return output

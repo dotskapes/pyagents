@@ -23,18 +23,26 @@
 #
 ###############################################################################
 
-
 class BaseAgent(object):
     """Base class for agents. You only need an update and a constructor for
     this to work properly.
     """
 
-    def __init__(self, settings):
-        """Constructor. Be sure to setup the adapter in your implementation.
-        """
+    def __init__(self, Adapter, settings):
+        ''' Base constructor for all agents
+        :param Adapter: The class of data adapter to use for this agent
+        :param settings: Connection information for the Canepi api
+        '''
         super(BaseAgent, self).__init__()
-        self.adapter = None
+        self.adapter = Adapter()
         self.settings = settings
 
-    def update(self):
-        return NotImplemented
+    def datapath(self):
+        ''' Get the base path to the Canepi data api from the settings'''
+        return 'http://' + self.settings['host'] + ':' + str(self.settings['port']) + self.settings['path'] + '/data'
+
+    def update(self, name, input_data):
+        ''' Push a write to the Canepi api through an HTTP request '''
+        path = self.datapath() + '/write/%s' % (name,)
+        return urllib2.urlopen(path, output).read()
+
