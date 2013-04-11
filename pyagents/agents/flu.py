@@ -58,7 +58,7 @@ countries = [
     'uy']
 
 
-class GoogleFluAgent:
+class GoogleFluAgent(BaseAgent):
     def __init__(self, settings):
         self.adapter = GoogleFluAdapter()
         self.settings = settings
