@@ -24,6 +24,8 @@
 ###############################################################################
 
 import urllib2
+import os
+import ConfigParser
 
 from pyagents.adapters import HealthmapAdapter
 from base import BaseAgent
@@ -36,9 +38,21 @@ class HealthmapAgent(BaseAgent):
     def __init__(self, settings):
         super(HealthmapAgent, self).__init__(settings)
         self.adapter = HealthmapAdapter()
+        cur_path = os.path.dirname(os.path.realpath(__file__))
+        cur_path = os.path.join(cur_path, '..')
+        self.config_path = os.path.join(cur_path, 'configs')
 
     def update(self):
-        server_output = urllib2.urlopen('%s?auth=%s&striphtml=1' % (
-            self.settings['source_uri'], self.settings['auth_token']))
+        source_uri = self.settings['source_uri']
+        if self.settings.get('mode') != 'testing':
+            config = ConfigParser.ConfigParser()
+            config.read(os.path.join(self.config_path, 'healthmap.local.ini'))
+            source_uri += '?'
+            test = config.items('production')
+            for k, v in config.items('production'):
+                if v != '':
+                    source_uri += k + '=' + v +'&'
+            source_uri = source_uri[:-1]
+        server_output = urllib2.urlopen(source_uri)
         output = self.adapter.adapt(server_output.read())
         return output
