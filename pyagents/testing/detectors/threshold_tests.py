@@ -1,6 +1,6 @@
 import unittest
 
-from pyagents.detectors import ThresholdDetector, ONE, ALL, AVERAGE
+from pyagents.detectors import ThresholdDetector
 
 class TestThresholdDetector(unittest.TestCase):
     def setUp(self):
@@ -10,6 +10,8 @@ class TestThresholdDetector(unittest.TestCase):
 
 
     def test_one(self):
+        ONE = ThresholdDetector.ONE
+
         self.assertTrue(self.detector.detect(self.peak))
 
         self.assertTrue(self.detector.detect(self.peak, threshold = 5, criteria = ONE))
@@ -19,6 +21,8 @@ class TestThresholdDetector(unittest.TestCase):
         self.assertTrue(self.detector.detect(self.nopeak, threshold = 995))
 
     def test_all(self):
+        ALL = ThresholdDetector.ALL
+
         self.assertTrue(self.detector.detect(self.nopeak, threshold = 900, criteria = ALL))
         self.assertFalse(self.detector.detect(self.nopeak, threshold = 1000, criteria = ALL))
 
@@ -29,6 +33,8 @@ class TestThresholdDetector(unittest.TestCase):
         self.assertFalse(self.detector.detect(self.peak, threshold = 9, criteria = ALL))
 
     def test_average(self):
+        AVERAGE = ThresholdDetector.AVERAGE
+
         self.assertTrue(self.detector.detect(self.peak, threshold = 1, criteria = AVERAGE))
         self.assertFalse(self.detector.detect(self.peak, threshold = 5, criteria = AVERAGE))
 

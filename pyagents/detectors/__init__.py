@@ -24,4 +24,4 @@
 ###############################################################################
 
 from base import BaseDetector
-from threshold import ThresholdDetector, ONE, ALL, AVERAGE
+from threshold import ThresholdDetector
