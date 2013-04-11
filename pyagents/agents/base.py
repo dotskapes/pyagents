@@ -23,6 +23,18 @@
 #
 ###############################################################################
 
-from base import BaseAgent
-from flu import GoogleFluAgent
-from pon import PointOfNeedDiagnosticAgent
+
+class BaseAgent(object):
+    """Base class for agents. You only need an update and a constructor for
+    this to work properly.
+    """
+
+    def __init__(self, settings):
+        """Constructor. Be sure to setup the adapter in your implementation.
+        """
+        super(BaseAgent, self).__init__()
+        self.adapter = None
+        self.settings = settings
+
+    def update(self):
+        return NotImplemented
