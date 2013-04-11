@@ -39,3 +39,5 @@ if __name__ == '__main__':
 
     if argv[2] == 'update':
         agent.update()
+    elif argv[2] == 'detect':
+        agent.detect()
