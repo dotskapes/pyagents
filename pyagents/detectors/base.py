@@ -23,6 +23,19 @@
 #
 ###############################################################################
 
-from base import BaseAgent
-from flu import GoogleFluAgent
-from pon import PointOfNeedDiagnosticAgent
+class BaseDetector(object):
+    ''' Base class for all detector. Abstractly, a detector takes data and determines if
+        certain criteria have been met to determine if an agent should trigger an alert
+    '''
+
+    def __init__(self):
+        super(BaseDetector, self).__init__()
+        
+    def detect(self, data, **kwargs):
+        ''' Check if input data some property 
+
+        :param data: A (detector specific) set of data to check
+        :param kwargs: Detector specific arguments to invoke the watcher
+        :returns: A boolean indicating if an alert should be triggered
+        '''
+        raise NotImplementedError()

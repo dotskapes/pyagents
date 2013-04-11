@@ -23,6 +23,22 @@
 #
 ###############################################################################
 
+import urllib2
+
 from base import BaseAgent
-from flu import GoogleFluAgent
-from pon import PointOfNeedDiagnosticAgent
+from pyagents.adapters import PointOfNeedDiagnosticAdapter
+
+
+class PointOfNeedDiagnosticAgent(BaseAgent):
+    """Data adapter for handling the HL7-ish DoD Point-of-Need Diagnostic
+    Data. This will be consumed in consecutive XML packages from an endpoint
+    hosted by MIT-LL."""
+
+    def __init__(self, settings):
+        super(PointOfNeedDiagnosticAgent, self).__init__(PointOfNeedDiagnosticAdapter, settings)
+
+    def update(self):
+        input_data = urllib2.urlopen(self.settings['source_uri']).read()
+        print self.adapter.adapt
+        output = self.adapter.adapt(input_data)
+        return output
