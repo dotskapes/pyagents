@@ -57,7 +57,7 @@ class TestHealthmapAgent(unittest.TestCase):
         settings = {'host': '127.0.0.1',
                     'port': 8888,
                     'path': '/fudd',
-                    'source_uri': 'http://localhost:%d/test_localurl.json' % self.port,
+                    'base_uri': 'http://localhost:%d/test_localurl.json' % self.port,
                     'mode': 'testing'
                     }
         agent = HealthmapAgent(settings)

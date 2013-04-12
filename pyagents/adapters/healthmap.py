@@ -41,10 +41,10 @@ class HealthmapAdapter(BaseAdapter):
 
         for record in healthmap_records:
             loc = [float(record['lat']), float(record['lng'])]
-            properties = {}
-            properties['country'] = record['country']
-            properties['place_name'] = record['place_name']
             for alert in record['alerts']:
+                properties = {}
+                properties['country'] = record['country']
+                properties['place_name'] = record['place_name']
                 properties.update(alert)
                 # change data into geojson format
                 geometry = {'type': 'Point',

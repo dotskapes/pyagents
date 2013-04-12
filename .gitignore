@@ -19,7 +19,7 @@ lib64
 pip-log.txt
 
 # local config files
-*.local.ini
+*.local.json
 
 # emacs
 *~
