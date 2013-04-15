@@ -18,6 +18,9 @@ lib64
 # Installer logs
 pip-log.txt
 
+# local config files
+*.local.json
+
 # emacs
 *~
 \#*
