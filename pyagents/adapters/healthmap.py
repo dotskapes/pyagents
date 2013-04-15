@@ -54,4 +54,8 @@ class HealthmapAdapter(BaseAdapter):
                            'properties': properties}
                 feature_collection.append(feature)
         return json.dumps({'type': 'FeatureCollection',
-                           'features': [feature_collection]})
+                           'features': [feature_collection],
+                           'crs':{'type':'name',
+                                  'properties':{'name':'EPSG:4326'}
+                                }
+                           })
