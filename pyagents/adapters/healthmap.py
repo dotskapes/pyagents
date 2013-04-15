@@ -40,7 +40,7 @@ class HealthmapAdapter(BaseAdapter):
         healthmap_records = json.loads(data)
 
         for record in healthmap_records:
-            loc = [float(record['lat']), float(record['lng'])]
+            loc = [float(record['lng']), float(record['lat'])]
             for alert in record['alerts']:
                 properties = {}
                 properties['country'] = record['country']
@@ -54,4 +54,8 @@ class HealthmapAdapter(BaseAdapter):
                            'properties': properties}
                 feature_collection.append(feature)
         return json.dumps({'type': 'FeatureCollection',
-                           'features': [feature_collection]})
+                           'features': [feature_collection],
+                           'crs':{'type':'name',
+                                  'properties':{'name':'EPSG:4326'}
+                                }
+                           })
