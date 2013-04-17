@@ -26,7 +26,7 @@
 from pyagents.detectors import BaseDetector
 
 class ThresholdDetector(BaseDetector):
-    ''' Check if data has reached a certain threshold '''
+    """ Check if data has reached a certain threshold """
 
     ONE = 1
     ALL = 2
@@ -36,13 +36,13 @@ class ThresholdDetector(BaseDetector):
         super(ThresholdDetector, self).__init__()
 
     def detect(self, data, threshold = 0, criteria = 1):
-        ''' Check for a threshold in a dataset
+        """ Check for a threshold in a dataset
 
         :param data: An array of data points
         :param threshold: The minimum value that triggers a threshold
         :param criteria: The mode that determines how the threshold is calculated
         :returns: A boolean indicating if an alert should be triggered
-        '''
+        """
         if criteria == ThresholdDetector.ONE:
             for point in data:
                 if point > threshold:

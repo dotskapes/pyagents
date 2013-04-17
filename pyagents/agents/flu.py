@@ -74,6 +74,7 @@ def parse_iso_date(candidate):
 
 
 class GoogleFluAgent(BaseAgent):
+    interval = 10000
     def __init__(self, settings):
         super(GoogleFluAgent, self).__init__(GoogleFluAdapter, settings)
         self.base_url = 'http://www.google.org/flutrends'
@@ -83,7 +84,7 @@ class GoogleFluAgent(BaseAgent):
         for country in countries:
             input = urllib2.urlopen(self.base_url + '/%s/data.txt' % (country,)).read()
             output = self.adapter.adapt(input)
-            return super(GoogleFluAgent, self).update('flu/' + country + '.json', output)
+            super(GoogleFluAgent, self).update('goog/' + country + '.json', output)
 
     def detect(self):
         ''' Pull down a copy of all Google Flu data from the server

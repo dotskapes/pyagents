@@ -50,9 +50,10 @@ class GoogleFluAdapter(BaseAdapter):
         for feature in referenceGeom['features']:
             name = feature['properties']['name']
             self.geomLookup[name] = feature['geometry']
-            for alt in feature['properties']['name_alt'].split('|'):
-                if len(alt):
-                    self.geomLookup[alt] = feature['geometry']
+            if feature['properties']['name_alt']:
+                for alt in feature['properties']['name_alt'].split('|'):
+                    if len(alt):
+                        self.geomLookup[alt] = feature['geometry']
 
     def adapt(self, data):
         lines = data.split('\n')[11:]
@@ -70,7 +71,8 @@ class GoogleFluAdapter(BaseAdapter):
             timestep = line[0]
             for admin, attr in zip(adminNames, line[1:]):
                 if admin in self.geomLookup:
-                    adminAttr[admin][timestep] = attr
+                    if attr:
+                        adminAttr[admin][timestep] = int(attr)
 
         for admin in adminAttr:
             feature = {

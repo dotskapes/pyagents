@@ -23,21 +23,28 @@
 #
 ###############################################################################
 
-from agents import GoogleFluAgent
 from sys import argv
+
+from manager import AgentManager
 
 settings = {
     'host': '127.0.0.1',
-    'port': 8888,
-    'path': '/fudd'
+    'port': 8080,
+    'path': '/canepi'
 }
 
-if __name__ == '__main__':
-    agent = None
-    if argv[1] == 'flu':
-        agent = GoogleFluAgent(settings)
+config = {
+    'agent': {
+        'name': 'flu',
+        'level': 1,
+        'feature': 'Indiana'
+        },
+    'detector': {
+        'name': 'threshold',
+        'threshold': 1500
+        }
+    }
 
-    if argv[2] == 'update':
-        agent.update()
-    elif argv[2] == 'detect':
-        agent.detect()
+if __name__ == '__main__':
+    manager = AgentManager(settings)
+    manager.run()
