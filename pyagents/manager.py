@@ -26,7 +26,7 @@
 import time
 
 # For now, just import everything manually, later, do this smarter
-from pyagents.agents import GoogleFluAgent, PointOfNeedDiagnosticAgent
+from pyagents.agents import GoogleFluAgent, PointOfNeedDiagnosticAgent, CanepiAgent
 from pyagents.detectors import ThresholdDetector
 
 def minIndex(array):
@@ -43,17 +43,24 @@ class AgentManager(object):
 
     def __init__(self, settings):
         # For now, just hard code the names
-        self._agents = {
-            'flu': GoogleFluAgent(settings),
-            #'pon': PointOfNeedDiagnosticAgent(settings)
+        self.__timer_agents = {
+            'flu': GoogleFluAgent(),
+            #'pon': PointOfNeedDiagnosticAgent()
             }
         self._detectors = {
             'threshold': ThresholdDetector()
             }
+        self.wireUpAgents(settings)
+
+    def wireUpAgents(self,settings):
+        ''' hard wire up for now '''
+        canepi = CanepiAgent(settings)
+        for src_agent in self.__timer_agents.values():
+            src_agent.addListener(canepi.update)
         
     def agent(self, name):
         """ Retrieve an agent from the manager by name """
-        return self._agents[name]
+        return self.__timer_agents[name]
 
     def detector(self, name):
         """ Retrieve a detector from the manager by name """
@@ -61,7 +68,7 @@ class AgentManager(object):
 
     def run(self):
         """ Start the main loop of the manager. Update agents at intervals. Never return """
-        agent_list = self._agents.values()
+        agent_list = self.__timer_agents.values()
         # Update every once initially: Next update 0 seconds from now
         next_updates = map(lambda x: 0, agent_list)
         while True:

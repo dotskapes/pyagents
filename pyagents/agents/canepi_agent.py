@@ -23,8 +23,20 @@
 #
 ###############################################################################
 
-from base import BaseAgent
-from flu import GoogleFluAgent
-from pon import PointOfNeedDiagnosticAgent
-from healthmap import HealthmapAgent
-from canepi_agent import CanepiAgent
+import urllib2
+
+class CanepiAgent(object):
+    """Agent that takes input and writes it to canepi"""
+
+    def __init__(self, settings):
+        self.settings = settings
+
+    def datapath(self):
+        """ Get the base path to the Canepi data api from the settings """
+        return 'http://' + self.settings['host'] + ':' + str(self.settings['port']) + self.settings['path'] + '/data'
+
+
+    def update(self, name, input_data):
+        """ Push a write to the Canepi api through an HTTP request, returns status """
+        path = self.datapath() + '/write/%s' % (name,)
+        return urllib2.urlopen(path, input_data).read()
