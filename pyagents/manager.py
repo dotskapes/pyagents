@@ -56,7 +56,7 @@ class AgentManager(object):
         ''' hard wire up for now '''
         canepi = CanepiAgent(settings)
         for src_agent in self.__timer_agents.values():
-            src_agent.addListener(canepi)
+            src_agent.addListener(canepi.update)
         
     def agent(self, name):
         """ Retrieve an agent from the manager by name """

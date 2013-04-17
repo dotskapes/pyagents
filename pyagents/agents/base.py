@@ -44,4 +44,4 @@ class BaseAgent(object):
     def update(self, name, input_data):
         """ Push a write to the Canepi api through an HTTP request """
         for listener in self.listeners:
-            listener.update(name,input_data)
+            listener(name,input_data)
