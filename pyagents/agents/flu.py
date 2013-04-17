@@ -75,8 +75,8 @@ def parse_iso_date(candidate):
 
 class GoogleFluAgent(BaseAgent):
     interval = 10000
-    def __init__(self, settings):
-        super(GoogleFluAgent, self).__init__(GoogleFluAdapter, settings)
+    def __init__(self):
+        super(GoogleFluAgent, self).__init__(GoogleFluAdapter)
         self.base_url = 'http://www.google.org/flutrends'
 
     def update(self):

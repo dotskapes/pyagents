@@ -25,23 +25,19 @@
 
 import urllib2
 
-class BaseAgent(object):
-    """Base class for agents. You only need an update and a constructor for
-    this to work properly.
-    """
+class CanepiAgent(object):
+    '''Agent that takes input and writes it to canepi
+    '''
 
-    def __init__(self, Adapter):
-        """ Base constructor for all agents
-        :param Adapter: The class of data adapter to use for this agent
-        """
-        super(BaseAgent, self).__init__()
-        self.adapter = Adapter()
-        self.listeners = []
+    def __init__(self, settings):
+        self.settings = settings
 
-    def addListener(self,listener):
-        self.listeners.append(listener)
+    def datapath(self):
+        """ Get the base path to the Canepi data api from the settings """
+        return 'http://' + self.settings['host'] + ':' + str(self.settings['port']) + self.settings['path'] + '/data'
+
 
     def update(self, name, input_data):
-        """ Push a write to the Canepi api through an HTTP request """
-        for listener in self.listeners:
-            listener.update(name,input_data)
+        """ Push a write to the Canepi api through an HTTP request, returns status """
+        path = self.datapath() + '/write/%s' % (name,)
+        return urllib2.urlopen(path, input_data).read()
