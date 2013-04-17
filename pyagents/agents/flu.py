@@ -80,7 +80,7 @@ class GoogleFluAgent(BaseAgent):
         self.base_url = 'http://www.google.org/flutrends'
 
     def update(self):
-        ''' Update Google Flu Trends data. '''
+        """ Update Google Flu Trends data. """
         for country in countries:
             input = urllib2.urlopen(self.base_url + '/%s/data.txt' % (country,)).read()
             output = self.adapter.adapt(input)

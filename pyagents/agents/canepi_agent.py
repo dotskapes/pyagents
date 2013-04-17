@@ -26,8 +26,7 @@
 import urllib2
 
 class CanepiAgent(object):
-    '''Agent that takes input and writes it to canepi
-    '''
+    """Agent that takes input and writes it to canepi"""
 
     def __init__(self, settings):
         self.settings = settings
