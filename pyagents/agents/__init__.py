@@ -28,3 +28,4 @@ from flu import GoogleFluAgent
 from pon import PointOfNeedDiagnosticAgent
 from healthmap import HealthmapAgent
 from canepi_agent import CanepiAgent
+from signal_agent import GoogleSignalAgent
