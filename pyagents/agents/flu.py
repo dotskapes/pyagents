@@ -33,37 +33,37 @@ from pyagents.agents import BaseAgent
 from pyagents.adapters import GoogleFluAdapter
 from pyagents.detectors import ThresholdDetector
 
-countries = [
-    'ar',
-    'au',
-    'at',
-    'be',
-    'bo',
-    'br',
-    'bg',
-    'ca',
-    'cl',
-    'fr',
-    'de',
-    'hu',
-    'jp',
-    'mx',
-    'nl',
-    'nz',
-    'no',
-    'py',
-    'pe',
-    'pl',
-    'ro',
-    'ru',
-    'za',
-    'es',
-    'se',
-    'ch',
-    'ua',
-    'us',
-    'uy']
-
+countries = {
+    'Argentina': 'ar',
+    'Australia': 'au',
+    'Austria': 'at',
+    'Belgium': 'be',
+    'Bolivia': 'bo',
+    'Brazil': 'br',
+    'Bulgaria': 'bg',
+    'Canada': 'ca',
+    'Chile': 'cl',
+    'France': 'fr',
+    'Germany': 'de',
+    'Hungary': 'hu',
+    'Japan': 'jp',
+    'Mexico': 'mx',
+    'Netherlands': 'nl',
+    'New Zealand': 'nz',
+    'Norway': 'no',
+    'Paraguay': 'py',
+    'Peru': 'pe',
+    'Poland': 'pl',
+    'Romania': 'ro',
+    'Russia': 'ru',
+    'South Africa': 'za',
+    'Spain': 'es',
+    'Sweden': 'se',
+    'Switzerland': 'ch',
+    'Urkraine': 'ua',
+    'United States of America': 'us',
+    'Uraguay': 'uy',
+    }
 
 def parse_iso_date(candidate):
     m = re.match('^(\d\d\d\d)-(\d\d)-(\d\d)$', candidate)
@@ -81,33 +81,8 @@ class GoogleFluAgent(BaseAgent):
 
     def update(self):
         """ Update Google Flu Trends data. """
-        for country in countries:
+        for country in countries.values():
             input = urllib2.urlopen(self.base_url + '/%s/data.txt' % (country,)).read()
             output = self.adapter.adapt(input)
-            super(GoogleFluAgent, self).update('goog/' + country + '.json', output)
-
-    def detect(self):
-        ''' Pull down a copy of all Google Flu data from the server
-            Inspect the most current value for a threshold
-        '''
-        for country in countries:
-            raw_data = urllib2.urlopen(self.datapath() + '/load/flu/%s.json' % (country,)).read()
-            geodata = json.loads(raw_data)
-            points = []
-            detector = ThresholdDetector()
-            for feature in geodata['features']:
-                dates = []
-                for key in feature['properties']:
-                    timestamp = parse_iso_date(key)
-                    if timestamp:
-                        dates.append({
-                                'key': key,
-                                'timestamp': timestamp
-                                })
-                dates.sort(key = lambda x: x['timestamp'])
-                if len(dates):
-                    current_date = dates[-1]
-                    points.append(int(feature['properties'][current_date['key']]))
-            result = detector.detect(points, threshold = 1500)
-            if result:
-                print country
+            name = 'goog/' + country + '.json'
+            super(GoogleFluAgent, self).notifyListeners(name, output)

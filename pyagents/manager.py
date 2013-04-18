@@ -26,7 +26,7 @@
 import time
 
 # For now, just import everything manually, later, do this smarter
-from pyagents.agents import GoogleFluAgent, PointOfNeedDiagnosticAgent, CanepiAgent
+from pyagents.agents import GoogleFluAgent, PointOfNeedDiagnosticAgent, CanepiAgent, GoogleSignalAgent
 from pyagents.detectors import ThresholdDetector
 
 def minIndex(array):
@@ -55,9 +55,12 @@ class AgentManager(object):
     def wireUpAgents(self,settings):
         ''' hard wire up for now '''
         canepi = CanepiAgent(settings)
+        # all src agents send data to canepi
         for src_agent in self.__timer_agents.values():
             src_agent.addListener(canepi.update)
-        
+        detector = GoogleSignalAgent(settings)
+        canepi.addListener(detector.new_data)
+
     def agent(self, name):
         """ Retrieve an agent from the manager by name """
         return self.__timer_agents[name]
