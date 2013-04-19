@@ -30,18 +30,19 @@ class BaseAgent(object):
     this to work properly.
     """
 
-    def __init__(self, Adapter):
+    def __init__(self, Adapter=None):
         """ Base constructor for all agents
         :param Adapter: The class of data adapter to use for this agent
         """
         super(BaseAgent, self).__init__()
-        self.adapter = Adapter()
+        if (Adapter):
+            self.adapter = Adapter()
         self.listeners = []
 
     def addListener(self,listener):
         self.listeners.append(listener)
 
-    def update(self, name, input_data):
-        """ Push a write to the Canepi api through an HTTP request """
+    def notifyListeners(self, name, output):
+        """ notify listeners of output """
         for listener in self.listeners:
-            listener(name,input_data)
+            listener(name,output)
