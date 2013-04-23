@@ -30,11 +30,12 @@ class BaseAgent(object):
     this to work properly.
     """
 
-    def __init__(self, Adapter=None):
+    def __init__(self, Adapter, settings):
         """ Base constructor for all agents
         :param Adapter: The class of data adapter to use for this agent
         """
         super(BaseAgent, self).__init__()
+        self.settings = settings
         if (Adapter):
             self.adapter = Adapter()
         self.listeners = []

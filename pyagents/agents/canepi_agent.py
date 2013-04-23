@@ -31,7 +31,7 @@ class CanepiAgent(BaseAgent):
     """Agent that takes input and writes it to canepi"""
 
     def __init__(self, settings):
-        super(CanepiAgent, self).__init__()
+        super(CanepiAgent, self).__init__(None, settings)
         self.settings = settings
 
     def datapath(self):

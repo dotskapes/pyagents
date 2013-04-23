@@ -25,12 +25,14 @@
 
 from sys import argv
 
+from agents import *
 from manager import AgentManager
 
 settings = {
     'host': '127.0.0.1',
     'port': 8080,
-    'path': '/canepi'
+    'path': '/canepi',
+    'base_uri': 'http://healthmap.org/HMapi.php',
 }
 
 config = {
@@ -46,5 +48,14 @@ config = {
     }
 
 if __name__ == '__main__':
-    manager = AgentManager(settings)
-    manager.run()
+    if len(argv) == 1:
+        manager = AgentManager(settings)
+        manager.run()
+    else:
+        if argv[1] == 'healthmap':
+            agent = HealthmapAgent(settings)
+        elif argv[1] == 'google':
+            agent = GoogleFluAgent(settings)
+
+        if argv[2] == 'update':
+            print agent.update()

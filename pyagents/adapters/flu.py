@@ -69,7 +69,7 @@ class GoogleFluAdapter(BaseAdapter):
         for line in lines[1:]:
             line = line.split(',')
             timestep = line[0]
-            for admin, attr in zip(adminNames, line[1:]):
+            for admin, attr in zip(adminNames[1:], line[1:]):
                 if admin in self.geomLookup:
                     if attr:
                         adminAttr[admin][timestep] = int(attr)
