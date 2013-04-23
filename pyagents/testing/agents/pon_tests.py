@@ -53,13 +53,44 @@ class TestPointOfNeedDiagnosticAgent(unittest.TestCase):
         self.server_process.join()
         del(self.server_process)
 
-    def test_single_file(self):
+    """def test_single_file(self):
         json_name = os.path.join(self.data_path, 'benice.json')
         settings = {'host': '127.0.0.1',
                     'port': 8888,
                     'path': '/fudd',
-                    'source_uri': 'http://localhost:%d/benice.xml' % self.port}
+                    'source_protocol': 'http',
+                    'source_host': 'localhost',
+                    'source_port': self.port,
+                    'source_path': 'bsve',
+                    'source_username': 'ar',
+                    'source_password': 'pass',
+                    'current_index': 0}
         agent = PointOfNeedDiagnosticAgent(settings)
         output = agent.update()
         with open(json_name, 'r') as cur_json:
             self.assertEqual(output, cur_json.read())
+
+    def test_multiple_files(self):
+        settings = {'host': '127.0.0.1',
+                    'port': 8888,
+                    'path': '/fudd',
+                    'source_protocol': 'http',
+                    'source_host': 'localhost',
+                    'source_port': self.port,
+                    'source_path': 'bsve',
+                    'source_username': 'ar',
+                    'source_password': 'pass'}
+        agent = PointOfNeedDiagnosticAgent(settings)
+
+    def test_live(self):
+        settings = {'host': '127.0.0.1',
+                    'port': 8888,
+                    'path': '/fudd',
+                    'source_protocol': 'http',
+                    'source_host': 'ecbcd2c.org',
+                    'source_port': 8080,
+                    'source_path': 'bsve',
+                    'source_username': 'ar',
+                    'current_index': '0000000000'}
+        agent = PointOfNeedDiagnosticAgent(settings)
+        agent.update()"""
