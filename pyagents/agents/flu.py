@@ -78,11 +78,13 @@ class GoogleFluAgent(BaseAgent):
     def __init__(self, settings):
         super(GoogleFluAgent, self).__init__(GoogleFluAdapter, settings)
         self.base_url = 'http://www.google.org/flutrends'
+        self.disease = 'Flu'
 
     def update(self):
         """ Update Google Flu Trends data. """
-        for country in countries.values():
-            input = urllib2.urlopen(self.base_url + '/%s/data.txt' % (country,)).read()
-            output = self.adapter.adapt(input)
-            name = 'goog/' + country + '.json'
+        for country in countries:
+            code = countries[country]
+            input = urllib2.urlopen(self.base_url + '/%s/data.txt' % (code,)).read()
+            output = self.adapter.adapt(input, country, self.disease)
+            name = 'goog'
             super(GoogleFluAgent, self).notifyListeners(name, output)

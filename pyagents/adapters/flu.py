@@ -55,7 +55,7 @@ class GoogleFluAdapter(BaseAdapter):
                     if len(alt):
                         self.geomLookup[alt] = feature['geometry']
 
-    def adapt(self, data):
+    def adapt(self, data, country, disease):
         lines = data.split('\n')[11:]
         adminNames = lines[0].split(',')
         adminAttr = {}
@@ -63,7 +63,7 @@ class GoogleFluAdapter(BaseAdapter):
 
         for admin in adminNames:
             if admin in self.geomLookup:
-                adminAttr[admin] = {'name': admin}
+                adminAttr[admin] = {'state': admin, 'country': country, 'disease': disease}
                 print admin
 
         for line in lines[1:]:
