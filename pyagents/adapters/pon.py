@@ -69,7 +69,7 @@ class PointOfNeedDiagnosticAdapter(BaseAdapter):
                     if child.tag == 'Location':
                         lat = float(child.find('Latitude').text)
                         lon = float(child.find('Longitude').text)
-                        loc = [lat, lon]
+                        loc = [lon, lat]
                     else:
                         header_properties[child.tag] = child.text
             elif node.tag == 'Footer':
@@ -91,5 +91,4 @@ class PointOfNeedDiagnosticAdapter(BaseAdapter):
                    'properties': dict(header_properties.items() +
                                       diseases_by_name.items() +
                                       footer_properties.items())}
-        return json.dumps({'type': 'FeatureCollection',
-                           'features': [feature]})
+        return feature

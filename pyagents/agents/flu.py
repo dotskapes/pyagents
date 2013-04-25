@@ -27,7 +27,11 @@ import re
 import datetime
 import time
 import urllib2
-import simplejson as json
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 from pyagents.agents import BaseAgent
 from pyagents.adapters import GoogleFluAdapter
