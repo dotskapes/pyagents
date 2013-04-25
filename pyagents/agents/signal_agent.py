@@ -1,5 +1,9 @@
 import urllib2
-import simplejson as json
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 from pyagents.agents.flu import countries, parse_iso_date
 from pyagents.detectors import ThresholdDetector

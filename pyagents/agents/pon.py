@@ -23,10 +23,17 @@
 #
 ###############################################################################
 
-import urllib2
+import requests
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 from base import BaseAgent
 from pyagents.adapters import PointOfNeedDiagnosticAdapter
+
+from lxml.etree import XMLSyntaxError
 
 
 class PointOfNeedDiagnosticAgent(BaseAgent):
@@ -38,7 +45,31 @@ class PointOfNeedDiagnosticAgent(BaseAgent):
         super(PointOfNeedDiagnosticAgent, self).__init__(PointOfNeedDiagnosticAdapter, settings)
 
     def update(self):
-        input_data = urllib2.urlopen(self.settings['source_uri']).read()
-        print self.adapter.adapt
-        output = self.adapter.adapt(input_data)
-        return output
+        query_url = '%s://%s:%d/%s/eds/query/%s/%s' % (self.settings['source_protocol'],
+                                                       self.settings['source_host'],
+                                                       self.settings['source_port'],
+                                                       self.settings['source_path'],
+                                                       self.settings['current_index'],
+                                                       '9999999999')
+        print query_url
+        out = requests.get(query_url, auth=(self.settings['source_username'],
+                                            self.settings['source_password']))
+
+        features = []
+        for text_id in out.text.split(','):
+            get_url = '%s://%s:%d/%s/eds/%s' % (self.settings['source_protocol'],
+                                                self.settings['source_host'],
+                                                self.settings['source_port'],
+                                                self.settings['source_path'],
+                                                text_id)
+            pon_obj = requests.get(get_url, auth=(self.settings['source_username'],
+                                                  self.settings['source_password']))
+
+            try:
+                print 'Parsing PoN: %s' % text_id
+                output = self.adapter.adapt(pon_obj.text)
+                features.append(output)
+            except XMLSyntaxError:
+                print 'Parsing of PoN document %s Failed' % text_id
+        return json.dumps({'type': 'FeatureCollection',
+                           'features': features})

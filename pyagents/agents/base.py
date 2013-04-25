@@ -23,27 +23,28 @@
 #
 ###############################################################################
 
-import urllib2
 
 class BaseAgent(object):
     """Base class for agents. You only need an update and a constructor for
     this to work properly.
     """
 
-    def __init__(self, Adapter, settings):
+
+    def __init__(self, Adapter=None, settings=None):
         """ Base constructor for all agents
         :param Adapter: The class of data adapter to use for this agent
         """
         super(BaseAgent, self).__init__()
-        self.settings = settings
-        if (Adapter):
+        if Adapter:
             self.adapter = Adapter()
+        if settings:
+            self.settings = settings
         self.listeners = []
 
-    def addListener(self,listener):
+    def addListener(self, listener):
         self.listeners.append(listener)
 
     def notifyListeners(self, name, output):
         """ notify listeners of output """
         for listener in self.listeners:
-            listener(name,output)
+            listener(name, output)
