@@ -52,10 +52,12 @@ if __name__ == '__main__':
         manager = AgentManager(settings)
         manager.run()
     else:
+        canepi = CanepiAgent(settings)
         if argv[1] == 'healthmap':
             agent = HealthmapAgent(settings)
-        elif argv[1] == 'google':
+        elif argv[1] == 'flu':
             agent = GoogleFluAgent(settings)
 
         if argv[2] == 'update':
-            print agent.update()
+            agent.addListener(canepi.update)
+            agent.update()

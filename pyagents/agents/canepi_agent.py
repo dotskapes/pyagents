@@ -41,6 +41,7 @@ class CanepiAgent(BaseAgent):
 
     def update(self, name, input_data):
         """ Push a write to the Canepi api through an HTTP request, returns status """
-        path = self.datapath() + '/write/%s' % (name,)
+        path = self.datapath() + '/writes/%s' % (name,)
         status = urllib2.urlopen(path, input_data).read()
+        print "Wrote %s with status %s " % (name, status)
         super(CanepiAgent, self).notifyListeners(None,None)
