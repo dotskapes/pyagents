@@ -80,7 +80,7 @@ class TestPointOfNeedDiagnosticAgent(unittest.TestCase):
                     'source_path': 'bsve',
                     'source_username': 'ar',
                     'source_password': 'pass'}
-        agent = PointOfNeedDiagnosticAgent(settings)
+        agent = PointOfNeedDiagnosticAgent(settings)"""
 
     def test_live(self):
         settings = {'host': '127.0.0.1',
@@ -91,6 +91,8 @@ class TestPointOfNeedDiagnosticAgent(unittest.TestCase):
                     'source_port': 8080,
                     'source_path': 'bsve',
                     'source_username': 'ar',
+                    'source_password': 'add_pass_here',
                     'current_index': '0000000000'}
         agent = PointOfNeedDiagnosticAgent(settings)
-        agent.update()"""
+        with open('pon.json', 'w') as out:
+            out.write(agent.update())

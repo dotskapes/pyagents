@@ -66,9 +66,10 @@ class PointOfNeedDiagnosticAgent(BaseAgent):
                                                   self.settings['source_password']))
 
             try:
+                print 'Parsing PoN: %s' % text_id
                 output = self.adapter.adapt(pon_obj.text)
+                features.append(output)
             except XMLSyntaxError:
                 print 'Parsing of PoN document %s Failed' % text_id
-            features.append(output)
         return json.dumps({'type': 'FeatureCollection',
                            'features': features})
