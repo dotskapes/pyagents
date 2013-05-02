@@ -64,9 +64,9 @@ countries = {
     'Spain': 'es',
     'Sweden': 'se',
     'Switzerland': 'ch',
-    'Urkraine': 'ua',
-    'United States of America': 'us',
-    'Uraguay': 'uy',
+    'Ukraine': 'ua',
+    'United States': 'us',
+    'Uruguay': 'uy',
     }
 
 def parse_iso_date(candidate):
