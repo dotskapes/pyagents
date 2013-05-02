@@ -37,14 +37,8 @@ from base import BaseAdapter
 
 
 class GoogleFluAdapter(BaseAdapter):
-    def __init__(self):
-        self.input = 'csv'
-        self.output = 'json'
-
-        self.geomLookup = {}
-
-        path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        referenceData = unicode(codecs.open(path + '/../data/admin1.json',
+    def add_ref(self, path):
+        referenceData = unicode(codecs.open(path,
                                 encoding='latin-1',  mode='r').read())
         referenceGeom = json.loads(referenceData)
         for feature in referenceGeom['features']:
@@ -54,6 +48,19 @@ class GoogleFluAdapter(BaseAdapter):
                 for alt in feature['properties']['name_alt'].split('|'):
                     if len(alt):
                         self.geomLookup[alt] = feature['geometry']
+        
+    def __init__(self):
+        self.input = 'csv'
+        self.output = 'json'
+
+        self.geomLookup = {}
+
+        base_path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+        country_path = base_path +  '/../data/admin0.json'
+        state_path = base_path +  '/../data/admin1.json'
+
+        self.add_ref(country_path)
+        self.add_ref(state_path)
 
     def adapt(self, data, country, disease):
         lines = data.split('\n')[11:]
@@ -61,15 +68,21 @@ class GoogleFluAdapter(BaseAdapter):
         adminAttr = {}
         features = []
 
-        for admin in adminNames:
+        countryAttr = {'state': None, 'country': country, 'disease': disease, 'admin': 0}
+        for admin in adminNames[2:]:
             if admin in self.geomLookup:
-                adminAttr[admin] = {'state': admin, 'country': country, 'disease': disease}
+                adminAttr[admin] = {'state': admin, 'country': country, 'disease': disease, 'admin': 1}
                 print admin
 
+        # Build the state level data
         for line in lines[1:]:
+            if not len(line):
+                continue
             line = line.split(',')
             timestep = line[0]
-            for admin, attr in zip(adminNames[1:], line[1:]):
+            if line[1]:
+                countryAttr[timestep] = int(line[1])
+            for admin, attr in zip(adminNames[2:], line[2:]):
                 if admin in self.geomLookup:
                     if attr:
                         adminAttr[admin][timestep] = int(attr)
@@ -80,6 +93,12 @@ class GoogleFluAdapter(BaseAdapter):
                 'properties': adminAttr[admin],
                 'geometry': self.geomLookup[admin]}
             features.append(feature)
+
+        features.append({
+                'type': 'Feature',
+                'properties': countryAttr,
+                'geometry': self.geomLookup[country]
+                })
         buffer = json.dumps({
             'type': 'FeatureCollection',
             'features': features})
