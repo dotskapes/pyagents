@@ -42,9 +42,9 @@ class GoogleFluAdapter(BaseAdapter):
                                 encoding='latin-1',  mode='r').read())
         referenceGeom = json.loads(referenceData)
         for feature in referenceGeom['features']:
-            name = feature['properties']['name']
+            name = feature['properties'].get('NAME') or feature ['properties'].get('name')
             self.geomLookup[name] = feature['geometry']
-            if feature['properties']['name_alt']:
+            if feature['properties'].get('name_alt'):
                 for alt in feature['properties']['name_alt'].split('|'):
                     if len(alt):
                         self.geomLookup[alt] = feature['geometry']
