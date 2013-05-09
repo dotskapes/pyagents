@@ -51,7 +51,7 @@ class HealthmapAgent(BaseAgent):
             config = json.load(cur_config)
         local_config_file = os.path.join(self.config_path, 'healthmap.local.json')
         if os.path.isfile(local_config_file):
-            with open(local_config_file, 'r') as cur_config: 
+            with open(local_config_file, 'r') as cur_config:
                 config.update(json.load(cur_config))
         else:
             print "Please create a healthmap.local.json and put the apikey there!"
@@ -66,10 +66,12 @@ class HealthmapAgent(BaseAgent):
                 if str(v) != '':
                     if isinstance(v, bool):
                         # Current Healthmap api only accepts lower case "false"
-                        source_uri += k + '=' + str.lower(str(v)) +'&'
+                        source_uri += k + '=' + str.lower(str(v)) + '&'
                     else:
-                        source_uri += k + '=' + str(v) +'&'
+                        source_uri += k + '=' + str(v) + '&'
             source_uri = source_uri[:-1]
         server_output = urllib2.urlopen(source_uri)
         output = self.adapter.adapt(server_output.read())
+        name = 'healthmap'
+        self.notifyListeners(name, output)
         return output

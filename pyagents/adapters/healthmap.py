@@ -45,6 +45,7 @@ class HealthmapAdapter(BaseAdapter):
                 properties = {}
                 properties['country'] = record['country']
                 properties['place_name'] = record['place_name']
+                properties['healthmap_id'] = alert['link'].split('?')[1]
                 properties.update(alert)
                 # change data into geojson format
                 geometry = {'type': 'Point',
@@ -54,7 +55,7 @@ class HealthmapAdapter(BaseAdapter):
                            'properties': properties}
                 feature_collection.append(feature)
         return json.dumps({'type': 'FeatureCollection',
-                           'features': [feature_collection],
+                           'features': feature_collection,
                            'crs':{'type':'name',
                                   'properties':{'name':'EPSG:4326'}
                                 }
