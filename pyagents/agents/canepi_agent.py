@@ -27,6 +27,7 @@ import urllib2
 
 from pyagents.agents import BaseAgent
 
+
 class CanepiAgent(BaseAgent):
     """Agent that takes input and writes it to canepi"""
 
@@ -36,12 +37,11 @@ class CanepiAgent(BaseAgent):
 
     def datapath(self):
         """ Get the base path to the Canepi data api from the settings """
-        return 'http://' + self.settings['host'] + ':' + str(self.settings['port']) + self.settings['path'] + '/data'
-
+        return 'http://' + self.settings['host'] + ':' + str(self.settings['port']) + self.settings['path'] + '/api/data'
 
     def update(self, name, input_data):
         """ Push a write to the Canepi api through an HTTP request, returns status """
         path = self.datapath() + '/writes/%s' % (name,)
         status = urllib2.urlopen(path, input_data).read()
         print "Wrote %s with status %s " % (name, status)
-        super(CanepiAgent, self).notifyListeners(None,None)
+        super(CanepiAgent, self).notifyListeners(None, None)
