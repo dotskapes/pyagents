@@ -45,7 +45,8 @@ class HealthmapAdapter(BaseAdapter):
                 properties = {}
                 properties['country'] = record['country']
                 properties['place_name'] = record['place_name']
-                properties['healthmap_id'] = alert['link'].split('?')[1]
+                healthmap_id = alert['link'].split('?')[1]
+                properties['healthmap_id'] = healthmap_id.split('&')[0]
                 properties.update(alert)
                 # change data into geojson format
                 geometry = {'type': 'Point',
