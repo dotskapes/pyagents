@@ -42,7 +42,8 @@ class PointOfNeedDiagnosticAgent(BaseAgent):
     hosted by MIT-LL."""
 
     def __init__(self, settings):
-        super(PointOfNeedDiagnosticAgent, self).__init__(PointOfNeedDiagnosticAdapter, settings)
+        super(PointOfNeedDiagnosticAgent, self).__init__(
+            PointOfNeedDiagnosticAdapter, settings, 'pon')
 
     def update(self):
         query_url = '%s://%s:%d/%s/eds/query/%s/%s' % (self.settings['source_protocol'],
