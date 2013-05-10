@@ -21,7 +21,7 @@ def recenter(file):
     output = lines[:2]
     # shift xllcorner -180
     output.append("xllcorner    -180.000000000000")
-    output.extend(lines[4:6])
+    output.extend(lines[3:6])
     data = lines[6:]
     for row in data:
         values = filter(len, row.split(' '))
