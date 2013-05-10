@@ -25,6 +25,11 @@
 
 import urllib2
 
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
 from pyagents.agents import BaseAgent
 
 
@@ -32,8 +37,7 @@ class CanepiAgent(BaseAgent):
     """Agent that takes input and writes it to canepi"""
 
     def __init__(self, settings):
-        super(CanepiAgent, self).__init__(None, settings)
-        self.settings = settings
+        super(CanepiAgent, self).__init__(None, settings, 'canepi')
 
     def datapath(self):
         """ Get the base path to the Canepi data api from the settings """
@@ -43,5 +47,6 @@ class CanepiAgent(BaseAgent):
         """ Push a write to the Canepi api through an HTTP request, returns status """
         path = self.datapath() + '/writes/%s' % (name,)
         status = urllib2.urlopen(path, input_data).read()
-        print "Wrote %s with status %s " % (name, status)
+        num = len(json.loads(status))
+        print "Wrote %s with status : %d Added " % (name, num)
         super(CanepiAgent, self).notifyListeners(None, None)

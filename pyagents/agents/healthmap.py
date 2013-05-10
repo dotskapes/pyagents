@@ -24,11 +24,7 @@
 ###############################################################################
 
 import urllib2
-import os
-try:
-    import json
-except ImportError:
-    import simplejson as json
+import datetime
 
 from pyagents.adapters import HealthmapAdapter
 from base import BaseAgent
@@ -39,39 +35,37 @@ class HealthmapAgent(BaseAgent):
     """
 
     def __init__(self, settings):
-        super(HealthmapAgent, self).__init__(HealthmapAdapter, settings)
-        cur_path = os.path.dirname(os.path.realpath(__file__))
-        cur_path = os.path.join(cur_path, '..')
-        self.config_path = os.path.join(cur_path, 'configs')
-
-    def getConfig(self):
-        config = {}
-        config_file = os.path.join(self.config_path, 'healthmap.json')
-        with open(config_file, 'r') as cur_config:
-            config = json.load(cur_config)
-        local_config_file = os.path.join(self.config_path, 'healthmap.local.json')
-        if os.path.isfile(local_config_file):
-            with open(local_config_file, 'r') as cur_config:
-                config.update(json.load(cur_config))
-        else:
-            print "Please create a healthmap.local.json and put the apikey there!"
-        return config
+        super(HealthmapAgent, self).__init__(HealthmapAdapter, settings,
+                                             'healthmap')
 
     def update(self):
-        source_uri = self.settings['base_uri']
+        base_uri = self.settings['base_uri']
+        print(self.settings)
         if self.settings.get('mode') != 'testing':
-            local_config = self.getConfig()
-            source_uri += '?'
-            for k, v in local_config.items():
-                if str(v) != '':
-                    if isinstance(v, bool):
-                        # Current Healthmap api only accepts lower case "false"
-                        source_uri += k + '=' + str.lower(str(v)) + '&'
-                    else:
-                        source_uri += k + '=' + str(v) + '&'
-            source_uri = source_uri[:-1]
-        server_output = urllib2.urlopen(source_uri)
-        output = self.adapter.adapt(server_output.read())
-        name = 'healthmap'
-        self.notifyListeners(name, output)
+            date_comps = self.settings['sdate'].split('-')
+            date_comps = [int(comp) for comp in date_comps]
+            sdate = datetime.date(date_comps[0], date_comps[1], date_comps[2])
+            today = datetime.date.today()
+            day = datetime.timedelta(days=1)
+            while sdate < today:
+                sdatestr = sdate.isoformat()
+                self.settings['sdate'] = sdatestr
+                self.settings['edate'] = (sdate + day).isoformat()
+                source_uri = base_uri + '?'
+                for k, v in self.settings.items():
+                    if str(v) != '':
+                        if isinstance(v, bool):
+                            # Current Healthmap api only accepts lower case "false"
+                            source_uri += k + '=' + str.lower(str(v)) + '&'
+                        else:
+                            source_uri += k + '=' + str(v) + '&'
+                source_uri = source_uri[:-1]
+                server_output = urllib2.urlopen(source_uri)
+                out_string = server_output.read()
+                try:
+                    output = self.adapter.adapt(out_string)
+                    self.notifyListeners(self.name, output)
+                except ValueError:
+                    print("No Data for %s" % sdatestr)
+                sdate = sdate + day
         return output

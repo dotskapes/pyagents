@@ -13,10 +13,11 @@ class GoogleSignalAgent(object):
     found then sends out output"""
 
     def __init__(self, settings):
-        self.settings = settings
+        super(GoogleSignalAgent, self).__init__(None, settings,
+                                                'googlesignal')
 
     def datapath(self):
-        """ Get the base path to the Canepi data api from the settings 
+        """ Get the base path to the Canepi data api from the settings
         should this be some sorta util fn? """
         return 'http://' + self.settings['host'] + ':' + str(self.settings['port']) + self.settings['path'] + '/data'
 
@@ -24,7 +25,7 @@ class GoogleSignalAgent(object):
     def new_data(self,dummy1,dummy2):
         """notification that new data has come into the system
         grab new data and look for a peak"""
-        
+
         for country in countries.keys():
             qtCountry = urllib2.quote(country)
             path = self.datapath() + '/load/goog?query=%s' % (qtCountry,)
@@ -49,4 +50,4 @@ class GoogleSignalAgent(object):
             result = detector.detect(points, threshold = 1500)
             if result:
                 print country
-        
+

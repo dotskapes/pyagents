@@ -22,6 +22,12 @@
 # limitations under the License.
 #
 ###############################################################################
+import os
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 
 class BaseAgent(object):
@@ -29,17 +35,46 @@ class BaseAgent(object):
     this to work properly.
     """
 
-
-    def __init__(self, Adapter=None, settings=None):
+    def __init__(self, Adapter=None, settings=None, name='base'):
         """ Base constructor for all agents
         :param Adapter: The class of data adapter to use for this agent
         """
         super(BaseAgent, self).__init__()
+        self.name = name
+        self.settings = self.get_config()
         if Adapter:
             self.adapter = Adapter()
         if settings:
-            self.settings = settings
+            self.settings.update(settings)
         self.listeners = []
+
+    def get_config(self):
+        """Pull configuration parameters from config files.
+        """
+        config = {}
+
+        # Get the config path
+        cur_path = os.path.dirname(os.path.realpath(__file__))
+        cur_path = os.path.join(cur_path, '..')
+        config_path = os.path.join(cur_path, 'configs')
+        print(config_path)
+
+        # Standard configuration file
+        config_file = os.path.join(config_path, '%s.json' % self.name)
+        print(config_file)
+        if os.path.isfile(config_file):
+            with open(config_file, 'r') as cur_config:
+                config = json.load(cur_config)
+
+        # Local configuration file
+        local_config_file = os.path.join(config_path,
+                                         '%s.local.json' % self.name)
+        print(local_config_file)
+        if os.path.isfile(local_config_file):
+            with open(local_config_file, 'r') as cur_config:
+                config.update(json.load(cur_config))
+
+        return config
 
     def addListener(self, listener):
         self.listeners.append(listener)
