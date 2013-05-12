@@ -91,4 +91,8 @@ class PointOfNeedDiagnosticAdapter(BaseAdapter):
                    'properties': dict(header_properties.items() +
                                       diseases_by_name.items() +
                                       footer_properties.items())}
-        return feature
+        ret = {'type': 'FeatureCollection',
+               'features': [feature],
+               'crs': {'type': 'name',
+                       'properties': {'name': 'EPSG:4326'}}}
+        return json.dumps(ret)
