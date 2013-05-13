@@ -57,11 +57,10 @@ class BaseAgent(object):
         cur_path = os.path.dirname(os.path.realpath(__file__))
         cur_path = os.path.join(cur_path, '..')
         config_path = os.path.join(cur_path, 'configs')
-        print(config_path)
 
         # Standard configuration file
         config_file = os.path.join(config_path, '%s.json' % self.name)
-        print(config_file)
+
         if os.path.isfile(config_file):
             with open(config_file, 'r') as cur_config:
                 config = json.load(cur_config)
@@ -69,7 +68,7 @@ class BaseAgent(object):
         # Local configuration file
         local_config_file = os.path.join(config_path,
                                          '%s.local.json' % self.name)
-        print(local_config_file)
+
         if os.path.isfile(local_config_file):
             with open(local_config_file, 'r') as cur_config:
                 config.update(json.load(cur_config))

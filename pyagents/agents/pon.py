@@ -52,11 +52,10 @@ class PointOfNeedDiagnosticAgent(BaseAgent):
                                                        self.settings['source_path'],
                                                        self.settings['current_index'],
                                                        '9999999999')
-        print query_url
+
         out = requests.get(query_url, auth=(self.settings['source_username'],
                                             self.settings['source_password']))
 
-        features = []
         for text_id in out.text.split(','):
             get_url = '%s://%s:%d/%s/eds/%s' % (self.settings['source_protocol'],
                                                 self.settings['source_host'],
@@ -69,8 +68,7 @@ class PointOfNeedDiagnosticAgent(BaseAgent):
             try:
                 print 'Parsing PoN: %s' % text_id
                 output = self.adapter.adapt(pon_obj.text)
-                features.append(output)
+                self.notifyListeners(self.name, output)
             except XMLSyntaxError:
                 print 'Parsing of PoN document %s Failed' % text_id
-        return json.dumps({'type': 'FeatureCollection',
-                           'features': features})
+        return output

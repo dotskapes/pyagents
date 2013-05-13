@@ -57,6 +57,8 @@ if __name__ == '__main__':
             agent = HealthmapAgent(settings)
         elif argv[1] == 'flu':
             agent = GoogleFluAgent(settings)
+        elif argv[1] == 'pon':
+            agent = PointOfNeedDiagnosticAgent(settings)
 
         if argv[2] == 'update':
             agent.addListener(canepi.update)
