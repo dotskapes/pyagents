@@ -7,8 +7,6 @@ For the flu import to work:
 
     cd pyagents/pyagents
 
-    mkdir data
-
     wget http://54.235.153.252/data/admin0.json data/admin0.json
     
     wget http://54.235.153.252/data/admin1.json data/admin1.json
